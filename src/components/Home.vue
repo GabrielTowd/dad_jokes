@@ -4,16 +4,17 @@
     <div class='content'>
       <img src='../assets/arrow.svg' alt='before arrow' class='before' v-on:click='count > 0 ? count -= 1: null'>
       <JokeComponent
+        v-if='jokes.length > 0'
         :joke='jokes[count]'
       />
-      <img src='../assets/arrow.svg' alt='next arrow' class='next' v-on:click='count+1 < jokes.length ? count += 1: null'>
+      <img src='../assets/arrow.svg' alt='next arrow' class='next' v-on:click='count+1 < jokes.length ? count += 1: null'/>
     </div>
     <div class='btns'>
       <div class='btn'>
-        A rigolé
+        -1
       </div>
       <div class='btn'>
-        N'a pas ri
+        +1
       </div>
     </div>
   </div>
@@ -21,18 +22,7 @@
 
 <script>
 import JokeComponent from './JokeComponent.vue'
-
-const firebase = require('firebase')
-// Required for side-effects
-var config = {
-  apiKey: 'AIzaSyB1XDrqY4M7Rd-ayRTsoDu1sWIG7lDGRsE',
-  authDomain: 'dad-jokes-4090.firebaseapp.com',
-  databaseURL: 'https://dad-jokes-4090.firebaseio.com',
-  storageBucket: 'gs://dad-jokes-4090.appspot.com'
-}
-firebase.initializeApp(config)
-var database = firebase.database()
-console.log(database)
+import firebase from '../firebase.js'
 
 export default {
   components: {
@@ -40,37 +30,19 @@ export default {
   },
   data () {
     return {
-      count: 1,
-      jokes: [
-        {
-          content: 'toto',
-          answer: 'mlkmlk',
-          score: 100
-        },
-        {
-          content: 'bdfkljsdfkljgs lljkdfsghdl k',
-          answer: '',
-          score: 100
-        },
-        {
-          content: 'sdfjkghldjkh sldjkldjkf',
-          answer: 'ljklj ljkh lkjh lkj',
-          score: 100
-        }
-      ]
+      count: 0,
+      jokes: []
     }
   },
-  methods: {
-    helloWorld: function () {
-      firebase.database().ref('posts/').push({
-        value: 'Test',
-        score: 100
-      }).then(() => {
-        console.log('Post has been sent')
-      }).catch(err => {
-        console.log(err)
+  created () {
+    var vm = this
+    var loadedJokes = firebase.database().ref('posts')
+    loadedJokes.on('value', function (snapshot) {
+      snapshot.forEach(function (childSnapshot) {
+        var childData = childSnapshot.val()
+        vm.jokes.push(childData)
       })
-    }
+    })
   }
 }
 </script>

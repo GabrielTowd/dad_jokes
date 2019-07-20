@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="content">{{ joke.content }}</p>
+    <p class="content">{{ joke.value }}</p>
     <div v-if='joke.answer.length > 0' class="answer content">
       <div class="answer-mask">
         <p>Réponse</p>
