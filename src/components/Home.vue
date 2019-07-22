@@ -2,18 +2,18 @@
   <div class='home-content'>
     <h1>Jokes de Papa</h1>
     <div class='content'>
-      <img src='../assets/arrow.svg' alt='before arrow' class='before' v-on:click='count > 0 ? count -= 1: null'>
+      <img src='../assets/arrow.svg' alt='before arrow' class='before' v-on:click='changeJoke'>
       <JokeComponent
         v-if='jokes.length > 0'
         :joke='jokes[count]'
       />
-      <img src='../assets/arrow.svg' alt='next arrow' class='next' v-on:click='count+1 < jokes.length ? count += 1: null'/>
+      <img src='../assets/arrow.svg' alt='next arrow' class='next' v-on:click='changeJoke(1)'/>
     </div>
     <div class='btns'>
-      <div class='btn'>
+      <div class='btn' v-on:click='updateScore(jokes[count], -1)'>
         -1
       </div>
-      <div class='btn'>
+      <div class='btn' v-on:click='updateScore(jokes[count], 1)'>
         +1
       </div>
     </div>
@@ -40,9 +40,40 @@ export default {
     loadedJokes.on('value', function (snapshot) {
       snapshot.forEach(function (childSnapshot) {
         var childData = childSnapshot.val()
+        childData.key = childSnapshot.ref_.key
         vm.jokes.push(childData)
       })
     })
+    vm.jokes.sort(() => Math.random() - 0.5)
+  },
+  methods: {
+    changeJoke: function (direction) {
+      const vm = this
+      if (direction === 1) {
+        if (vm.count + 1 < vm.jokes.length) {
+          vm.count += 1
+        }
+      } else {
+        if (vm.count > 0) {
+          vm.count -= 1
+        }
+      }
+    },
+    updateScore: function (currentJoke, value) {
+      const vm = this
+      firebase.database().ref('posts/' + currentJoke.key).set({
+        answer: currentJoke.answer,
+        score: currentJoke.score += value,
+        value: currentJoke.value
+      }, function (err) {
+        if (err) {
+          console.log(err)
+        } else {
+          vm.changeJoke(1)
+          console.log('Joke updated successfully')
+        }
+      })
+    }
   }
 }
 </script>
