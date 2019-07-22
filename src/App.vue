@@ -13,7 +13,7 @@ export default {
 <style>
 body, h1, p{
   margin: 0;
-  font-family: sans-serif;
+  font-family: 'Open Sans';
 }
 
 body{

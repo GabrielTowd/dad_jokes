@@ -36,15 +36,17 @@ export default {
   },
   created () {
     var vm = this
+    let jokes = []
     var loadedJokes = firebase.database().ref('posts')
     loadedJokes.on('value', function (snapshot) {
       snapshot.forEach(function (childSnapshot) {
         var childData = childSnapshot.val()
         childData.key = childSnapshot.ref_.key
-        vm.jokes.push(childData)
+        jokes.push(childData)
       })
+      jokes.sort(() => Math.random() - 0.5)
     })
-    vm.jokes.sort(() => Math.random() - 0.5)
+    vm.jokes = jokes
   },
   methods: {
     changeJoke: function (direction) {
@@ -83,7 +85,9 @@ export default {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 10vh 0;
+    box-sizing: border-box;
   }
 
   h1{
@@ -102,12 +106,11 @@ export default {
 
   .before, .next{
     width: 50px;
-    margin: 0 50px;
+    margin: 0 5vw;
   }
 
   .before:active, .next:active{
-    margin: 0 55px;
-    width: 40px;
+    opacity: .5;
   }
 
   .before{
@@ -148,5 +151,11 @@ export default {
     margin-top: 5px;
     box-shadow: 0 0px 0 0 rgba(0, 0, 0, 0);
     transition: all ease .1s;
+  }
+
+  @media screen and (max-width: 768px){
+    .home-content{
+      padding: 5vh 0;
+    }
   }
 </style>

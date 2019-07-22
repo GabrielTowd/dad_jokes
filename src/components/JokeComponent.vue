@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="bloc">
     <p class="content">{{ joke.value }}</p>
     <div v-if='joke.answer.length > 0' class="answer content">
       <div class="answer-mask">
         <p>Réponse</p>
       </div>
-      {{ joke.answer }}
+      <p>{{ joke.answer }}</p>
     </div>
   </div>
 </template>
@@ -22,18 +22,21 @@ export default {
 </script>
 
 <style scoped>
+  .bloc{
+    max-width: 65vw;
+  }
+
   .content{
     text-align: center;
     font-size: 42px;
     color: white;
-    font-family: 'Open Sans';
     font-weight: 300;
     font-style: italic;
   }
 
   .answer{
     margin: 20px auto 0 auto;
-    width: max-content;
+    max-width: max-content;
     padding: 7px 20px;
     position: relative;
     color: transparent;
@@ -52,6 +55,9 @@ export default {
     opacity: 1;
     cursor: pointer;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .answer-mask:hover{
@@ -64,7 +70,15 @@ export default {
 
   .answer-mask p{
     color: rgba(162, 60, 60, 0.76);
-    text-align: center;
-    line-height: 290%;
+  }
+
+  @media screen and (max-width: 768px){
+    .content{
+      font-size: 26px;
+    }
+
+    .answer-mask{
+      font-size: 18px;
+    }
   }
 </style>
