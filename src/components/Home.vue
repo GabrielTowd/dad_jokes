@@ -93,7 +93,7 @@ export default {
   h1{
     text-align: center;
     font-size: 35px;
-    font-family: 'Kadisoka Script';
+    font-family: 'Kadisoka Script', sans-serif;
     color: #CF5858;
   }
 

@@ -1,8 +1,8 @@
 <template>
-  <div class="bloc">
-    <p class="content">{{ joke.value }}</p>
-    <div v-if='joke.answer.length > 0' class="answer content">
-      <div class="answer-mask">
+  <div class='bloc'>
+    <p class='content'>{{ joke.value }}</p>
+    <div v-if='joke.answer.length > 0' v-bind:class='[this.isMasked ? "" : "disable-mask" ]' class='answer content' v-on:click='toggleMask'>
+      <div class='answer-mask'>
         <p>Réponse</p>
       </div>
       <p>{{ joke.answer }}</p>
@@ -11,11 +11,22 @@
 </template>
 
 <script>
+
 export default {
+  data () {
+    return {
+      isMasked: true
+    }
+  },
   props: {
     joke: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    toggleMask: function () {
+      this.isMasked = !this.isMasked
     }
   }
 }
@@ -65,6 +76,14 @@ export default {
   }
 
   .answer:hover{
+    color: white;
+  }
+
+  .disable-mask .answer-mask{
+    opacity: 0;
+  }
+
+  .disable-mask.answer{
     color: white;
   }
 
