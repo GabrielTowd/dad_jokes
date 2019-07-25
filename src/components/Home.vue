@@ -81,6 +81,11 @@ export default {
 </script>
 
 <style scoped>
+  @font-face {
+    font-family: 'Kadisoka';
+    src: url('../assets/fonts/Kadisoka_Script.ttf');
+  }
+
   .home-content{
     height: 100vh;
     display: flex;
@@ -93,7 +98,7 @@ export default {
   h1{
     text-align: center;
     font-size: 35px;
-    font-family: 'Kadisoka Script', sans-serif;
+    font-family: 'Kadisoka', sans-serif;
     color: #CF5858;
   }
 
