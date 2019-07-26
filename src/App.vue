@@ -11,8 +11,12 @@ export default {
 </script>
 
 <style>
-body, h1, p{
+body, h1, h2, p{
   margin: 0;
+}
+
+input:focus {
+    outline-width: 0;
 }
 
 body{

@@ -25,7 +25,7 @@ export default {
     }
   },
   methods: {
-    toggleMask: function () {
+    toggleMask () {
       this.isMasked = !this.isMasked
     }
   }

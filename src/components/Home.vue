@@ -1,6 +1,13 @@
 <template>
   <div class='home-content'>
-    <h1>Jokes de Papa</h1>
+    <JokeProposition
+      v-show='isShow'
+      @close='toggleShow'
+    />
+    <div class='header'>
+      <h1>Jokes de Papa</h1>
+      <div class='submission' v-on:click='toggleShow'>Proposer une blague</div>
+    </div>
     <div class='content'>
       <img src='../assets/arrow.svg' alt='before arrow' class='before' v-on:click='changeJoke'>
       <JokeComponent
@@ -22,16 +29,19 @@
 
 <script>
 import JokeComponent from './JokeComponent.vue'
+import JokeProposition from './JokePropositionPopUp.vue'
 import firebase from '../firebase.js'
 
 export default {
   components: {
-    JokeComponent
+    JokeComponent,
+    JokeProposition
   },
   data () {
     return {
       count: 0,
-      jokes: []
+      jokes: [],
+      isShow: false
     }
   },
   created () {
@@ -49,7 +59,14 @@ export default {
     vm.jokes = jokes
   },
   methods: {
-    changeJoke: function (direction) {
+    toggleShow () {
+      if (this.isShow === false) {
+        this.isShow = true
+      } else {
+        this.isShow = false
+      }
+    },
+    changeJoke (direction) {
       const vm = this
       if (direction === 1) {
         if (vm.count + 1 < vm.jokes.length) {
@@ -61,7 +78,7 @@ export default {
         }
       }
     },
-    updateScore: function (currentJoke, value) {
+    updateScore (currentJoke, value) {
       const vm = this
       firebase.database().ref('posts/' + currentJoke.key).set({
         answer: currentJoke.answer,
@@ -93,6 +110,14 @@ export default {
     justify-content: space-between;
     padding: 10vh 0;
     box-sizing: border-box;
+    position: relative;
+  }
+
+  .header{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5vw;
+    flex-wrap: wrap;
   }
 
   h1{
@@ -100,6 +125,16 @@ export default {
     font-size: 35px;
     font-family: 'Kadisoka', sans-serif;
     color: #CF5858;
+  }
+
+  .submission{
+    height: max-content;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 2px solid #CF5858;
+    color: #CF5858;
+    font-weight: 600;
+    cursor: pointer;
   }
 
   .content{
