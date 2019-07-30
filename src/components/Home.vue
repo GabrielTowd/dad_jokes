@@ -1,13 +1,6 @@
 <template>
   <div class='home-content'>
-    <JokeProposition
-      v-show='isShow'
-      @close='toggleShow'
-    />
-    <div class='header'>
-      <h1>Jokes de Papa</h1>
-      <div class='submission' v-on:click='toggleShow'>Proposer une blague</div>
-    </div>
+    <Header/>
     <div class='content'>
       <img src='../assets/arrow.svg' alt='before arrow' class='before' v-on:click='changeJoke'>
       <JokeComponent
@@ -28,27 +21,26 @@
 </template>
 
 <script>
+import Header from './Header.vue'
 import JokeComponent from './JokeComponent.vue'
-import JokeProposition from './JokePropositionPopUp.vue'
 import firebase from '../firebase.js'
 
 export default {
   components: {
     JokeComponent,
-    JokeProposition
+    Header
   },
   data () {
     return {
       count: 0,
-      jokes: [],
-      isShow: false
+      jokes: []
     }
   },
   created () {
     var vm = this
     let jokes = []
     var loadedJokes = firebase.database().ref('posts')
-    loadedJokes.on('value', function (snapshot) {
+    loadedJokes.once('value', function (snapshot) {
       snapshot.forEach(function (childSnapshot) {
         var childData = childSnapshot.val()
         childData.key = childSnapshot.ref_.key
@@ -59,13 +51,6 @@ export default {
     vm.jokes = jokes
   },
   methods: {
-    toggleShow () {
-      if (this.isShow === false) {
-        this.isShow = true
-      } else {
-        this.isShow = false
-      }
-    },
     changeJoke (direction) {
       const vm = this
       if (direction === 1) {
@@ -98,43 +83,14 @@ export default {
 </script>
 
 <style scoped>
-  @font-face {
-    font-family: 'Kadisoka';
-    src: url('../assets/fonts/Kadisoka_Script.ttf');
-  }
-
   .home-content{
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10vh 0;
+    padding-bottom: 10vh;
     box-sizing: border-box;
     position: relative;
-  }
-
-  .header{
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5vw;
-    flex-wrap: wrap;
-  }
-
-  h1{
-    text-align: center;
-    font-size: 35px;
-    font-family: 'Kadisoka', sans-serif;
-    color: #CF5858;
-  }
-
-  .submission{
-    height: max-content;
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: 2px solid #CF5858;
-    color: #CF5858;
-    font-weight: 600;
-    cursor: pointer;
   }
 
   .content{
@@ -147,6 +103,7 @@ export default {
   .before, .next{
     width: 50px;
     margin: 0 5vw;
+    cursor: pointer;
   }
 
   .before:active, .next:active{
@@ -195,7 +152,7 @@ export default {
 
   @media screen and (max-width: 768px){
     .home-content{
-      padding: 5vh 0;
+      padding-bottom: 5vh;
     }
   }
 </style>

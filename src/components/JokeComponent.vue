@@ -96,6 +96,11 @@ export default {
       font-size: 26px;
     }
 
+    .bloc{
+      overflow: scroll;
+      max-height: 60vh;
+    }
+
     .answer-mask{
       font-size: 18px;
     }
